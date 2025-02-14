@@ -1,0 +1,21 @@
+networks:
+  default:
+    name: opentelemetry-collector
+    driver: bridge
+services:
+  collector:
+    image: otel/opentelemetry-collector-contrib:0.119.0
+    volumes:
+      - ./otel-config.yaml:/otel-config.yaml
+      - file_exporter:/file_exporter
+    command: ["--config=/otel-config.yaml"]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+volumes:
+  file_exporter:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: file_exporter
+      o: bind
